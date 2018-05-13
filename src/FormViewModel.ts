@@ -3,15 +3,14 @@ import {isFunction, setNestedObjectValues, setIn, yupToFormErrors, validateYupSc
 import set from 'lodash.set';
 
 export default class FormViewModel {
-  validationSchema;
   validate;
+  validationSchema;
   initialValues = {};
   @observable values = {...this.initialValues};
   @observable touched = {};
   @observable errors = {};
   @observable isSubmitting = false;
   @observable submitCount = 0;
-
 
   getValueFromEvent(e) {
     const {type, value, checked} = e.target;
@@ -107,19 +106,25 @@ export default class FormViewModel {
       return {};
     } catch(err) {
       const errors = yupToFormErrors(err);
+      console.log(errors);
       this.isSubmitting = false;
       return errors;
     }
   }
 
   async runValidations(values = this.values) {
+    let schemaErrors;
+    let validateFnErrors;
+
     if (this.validationSchema) {
-      this.runValidationSchema(values);
+      schemaErrors = await this.runValidationSchema(values);
     }
 
     if (this.validate) {
-      this.errors = await this.validate(this.values);
+      validateFnErrors = await this.validate(this.values);
     }
+
+    this.errors = {...schemaErrors, ...validateFnErrors};
   }
 
   submitForm = async () => {
