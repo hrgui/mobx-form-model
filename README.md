@@ -25,20 +25,42 @@ I really like the API from [formik](https://github.com/jaredpalmer/formik) but I
 
 # Example
 
+https://codesandbox.io/s/2vonkqjjxp
+
 ```jsx
-import {observer} from 'mobx-react';
-import {observable} from 'mobx';
-import React from 'react';
-import {Field, FormViewModel, ModelForm} from '@hrgui/mobx-form-model';
+import { observer } from "mobx-react";
+import { observable } from "mobx";
+import React from "react";
+import {render} from 'react-dom';
+import { Field, FormViewModel, ModelForm } from "@hrgui/mobx-form-model";
+import yup from "yup";
 
 class Person extends FormViewModel {
+  validationSchema = yup.object().shape({
+    firstName: yup.string().required(),
+    lastName: yup.string().required()
+  });
+
+  validate = values => {
+    const errors = {};
+    if (!values.firstName) {
+      errors.firstName = "You will need a firstname, buddy.";
+    }
+
+    return errors;
+  };
+
   constructor() {
     super();
 
     this.initialValues = {
-      firstName: 'Mickey',
-      lastName: 'Mouse'
+      firstName: "Mickey",
+      lastName: "Mouse"
     };
+  }
+
+  executeSubmit() {
+    alert(this.values);
   }
 }
 
@@ -49,15 +71,27 @@ export class PersonForm extends React.Component {
   @observable person = new Person();
 
   render() {
-    return <ModelForm model={this.person}>
-      <Field name="firstName" />
-      <Field name="lastName" />
-      <Field name="address.city" />
-      <input type="text" value={this.person.firstName} onChange={e => this.person.firstName = e.target.value} />
-      <pre>{JSON.stringify(this.person, null, 2)}</pre>
-    </ModelForm>
+    return (
+      <ModelForm model={this.person}>
+        <Field name="firstName" />
+        <Field name="lastName" />
+        <Field name="address.city" />
+        <input
+          type="text"
+          value={this.person.values.firstName}
+          onChange={e => (this.person.values.firstName = e.target.value)}
+        />
+        <pre>values: {JSON.stringify(this.person.values, null, 2)}</pre>
+        <pre>touched: {JSON.stringify(this.person.touched, null, 2)}</pre>
+        <pre>errors: {JSON.stringify(this.person.errors, null, 2)}</pre>
+        <button onClick={this.person.handleSubmit}>Save</button>
+      </ModelForm>
+    );
   }
 }
+
+render(<PersonForm />, document.getElementById("root"));
+
 ```
 
 # API 
