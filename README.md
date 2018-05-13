@@ -12,7 +12,7 @@ I really like the API from [formik](https://github.com/jaredpalmer/formik) but I
 - [Example](#example)
 - [API](#api)
 - [FAQ](#faq)
-  - [Why not just use formik?](#why-not-just-use-formik)
+  - [Why not just use formik, and sync it to MobX?](#why-not-just-use-formik-and-sync-it-to-mobx)
 
 <!-- /TOC -->
 
@@ -66,5 +66,5 @@ Coming Soon, but its very similar to formik.
 
 # FAQ
 
-## Why not just use formik?
+## Why not just use formik, and sync it to MobX? 
 Synchronization of state between Formik and MobX is taboo, unless if you are a jedi. Doing so will have you ponder about the React lifecycle, or have very bad performance issues on forms.
