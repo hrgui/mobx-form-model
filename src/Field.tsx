@@ -1,7 +1,7 @@
 import { ModelFormContext } from './ModelForm';
 import * as React from 'react';
 import { Observer, observer } from 'mobx-react';
-import { getIn, isFunction } from './utils';
+import { getIn, isFunction, isString } from './utils';
 import filterReactProps from 'filter-react-props';
 
 
@@ -34,9 +34,8 @@ export default class Field extends React.Component<any, any> {
               return render(props);
             }
 
-            
-
-            return React.createElement(component, {...filterReactProps(props), _rendercount: this.rendercount});
+            const finalProps = isString(component) ? filterReactProps(props) : props;
+            return React.createElement(component, {...finalProps, _rendercount: this.rendercount});
           }}
         </Observer>
       }}
