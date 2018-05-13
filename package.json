@@ -1,0 +1,43 @@
+{
+  "name": "@hrgui/mobx-form-model",
+  "version": "0.1.0-alpha.1",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "module": "dist/index.js",
+  "scripts": {
+    "build": "yarn clean:build && babel src --ignore src/**/__tests__ --out-dir dist --extensions '.ts,.tsx'",
+    "watch": "yarn clean:build && babel src --ignore src/**/__tests__ --out-dir dist --extensions '.ts,.tsx' --watch",
+    "clean:build": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.46",
+    "@babel/core": "^7.0.0-beta.46",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.46",
+    "@babel/polyfill": "^7.0.0-beta.46",
+    "@babel/preset-env": "^7.0.0-beta.46",
+    "@babel/preset-react": "^7.0.0-beta.46",
+    "@babel/preset-stage-3": "^7.0.0-beta.46",
+    "@babel/preset-typescript": "^7.0.0-beta.46",
+    "@types/jest": "^22.2.3",
+    "@types/lodash.clonedeep": "^4.5.3",
+    "@types/lodash.topath": "^4.5.3",
+    "@types/node": "^10.0.8",
+    "@types/react": "^16.3.14",
+    "@types/react-dom": "^16.0.5",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "babel-preset-mobx": "^1.0.2",
+    "mobx": "^4.2.1",
+    "mobx-react": "^5.1.2",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2"
+  },
+  "dependencies": {
+    "@babel/preset-stage-2": "^7.0.0-beta.46",
+    "@types/lodash.get": "^4.4.3",
+    "@types/lodash.set": "^4.3.3",
+    "lodash.clonedeep": "^4.5.0",
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2",
+    "lodash.topath": "^4.5.2"
+  }
+}
