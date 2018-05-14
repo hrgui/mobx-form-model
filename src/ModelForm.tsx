@@ -1,7 +1,7 @@
 import {observer} from 'mobx-react';
 import * as React from 'react';
 import FormViewModel from './FormViewModel';
-export const ModelFormContext = React.createContext<FormViewModel>(null);
+export const ModelFormContext = React.createContext<ModelFormProps>(null);
 
 export interface ModelFormProps {
   model?: FormViewModel;
@@ -11,8 +11,9 @@ export interface ModelFormProps {
 @observer
 export default class ModelForm extends React.Component<ModelFormProps, any> {
   render() {
-    return <ModelFormContext.Provider value={this.props.model}>
-      {this.props.children}
+    const {children, ...propsToSend} = this.props;
+    return <ModelFormContext.Provider value={{model: this.props.model, ...propsToSend}}>
+      {children}
     </ModelFormContext.Provider>
   }
 };

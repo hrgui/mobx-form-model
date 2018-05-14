@@ -10,7 +10,7 @@ export default class Field extends React.Component<any, any> {
   rendercount = 0;
   render() {
     return <ModelFormContext.Consumer>
-      {(model) => {
+      {({model}) => {
         if (!model) {
           return null;
         }
