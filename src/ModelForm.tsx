@@ -11,7 +11,7 @@ export interface ModelFormProps {
 @observer
 export default class ModelForm extends React.Component<ModelFormProps, any> {
   render() {
-    const {children, ...propsToSend} = this.props;
+    let {children, ...propsToSend} = this.props;
     return <ModelFormContext.Provider value={{model: this.props.model, ...propsToSend}}>
       {children}
     </ModelFormContext.Provider>

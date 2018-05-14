@@ -1,22 +1,22 @@
-import {observable} from 'mobx';
-import {isFunction, setNestedObjectValues, setIn, yupToFormErrors, validateYupSchema, getIn} from './utils';
+import { observable } from 'mobx';
+import { isFunction, setNestedObjectValues, setIn, yupToFormErrors, validateYupSchema, getIn } from './utils';
 import set from 'lodash.set';
 
 export default class FormViewModel {
+  onSubmit;
   validate;
   validationSchema;
   initialValues = {};
-  @observable values = {...this.initialValues};
+  @observable values = { ...this.initialValues };
   @observable touched = {};
   @observable errors = {};
   @observable isSubmitting = false;
   @observable submitCount = 0;
 
-  getValueFromEvent(e) {
-    const {type, value, checked} = e.target;
+  getValueFromInputEvent(e) {
+    const { type, value, checked } = e.target;
     const isNumericalValue = /number|range/.test(type);
     const isCheckbox = /checkbox/.test(type);
-
 
     if (isNumericalValue) {
       let parsed = parseFloat(value);
@@ -30,12 +30,11 @@ export default class FormViewModel {
     return value;
   }
 
-
   handleChange = (e) => {
     const target = e.target || e;
-    const {name, id} = target;
+    const { name, id } = target;
     const fieldName = name || id;
-    const fieldValue = this.getValueFromEvent(e);
+    const fieldValue = this.getValueFromInputEvent(e);
     if (e.persist) {
       e.persist();
     }
@@ -44,7 +43,7 @@ export default class FormViewModel {
 
   handleBlur = (e) => {
     const target = e.target || e;
-    const {name, id} = target;
+    const { name, id } = target;
     const fieldName = name || id;
     this.setFieldTouched(fieldName, true);
   }
@@ -59,28 +58,8 @@ export default class FormViewModel {
     this.runValidations();
   };
 
-  setInMobx(prop, name, value) {
-    const lastValue = getIn(this[prop], name);
-
-    if (lastValue === undefined) {
-      this[prop] = setIn(this[prop], name, value);
-    } else {
-      set(this[prop], name, value);
-    }
-  }
-
   setFieldTouched = (name, value) => {
-    // if (typeof this.touched[name] === "undefined") {
-    //   this.touched = setIn(this.touched, name, value);
-    // } else {
-    //   this.touched[name] = value;
-    // }
-
     this.setInMobx('touched', name, value);
-    
-
-
-    
     this.runValidations();
   };
 
@@ -93,24 +72,12 @@ export default class FormViewModel {
   };
 
   resetForm = () => {
-    this.values = {...this.initialValues};
+    this.values = { ...this.initialValues };
     this.touched = {};
     this.errors = {};
     this.isSubmitting = false;
   };
 
-  async runValidationSchema(values) {
-    const schema = isFunction(this.validationSchema) ? this.validationSchema() : this.validationSchema;
-    try {
-      const results = await validateYupSchema(values, schema);
-      return {};
-    } catch(err) {
-      const errors = yupToFormErrors(err);
-      console.log(errors);
-      this.isSubmitting = false;
-      return errors;
-    }
-  }
 
   async runValidations(values = this.values) {
     let schemaErrors;
@@ -124,49 +91,74 @@ export default class FormViewModel {
       validateFnErrors = await this.validate(this.values);
     }
 
-    this.errors = {...schemaErrors, ...validateFnErrors};
+    this.errors = { ...schemaErrors, ...validateFnErrors };
+
+    return Object.keys(this.errors).length === 0;
   }
 
-  submitForm = async () => {
-    this.touched = setNestedObjectValues(this.values, true);
-    this.isSubmitting = true;
-    this.submitCount = this.submitCount + 1;
+  onReset = () => {
+    this.values = { ...this.initialValues };
+    this.touched = {};
+    this.errors = {};
+    this.isSubmitting = false;
+    this.submitCount = 0;
+  };
 
-    if (this.validate) {
-      this.errors = await this.validate(this.values);
-      const isValid = Object.keys(this.errors).length === 0;
+  onSubmitSuccess(response) {}
+  onSubmitError(e) {}
 
-      if (!isValid) {
-        return;
-      }
-    }
-
-    if (this.validationSchema) {
-      this.errors = await this.runValidationSchema(this.values);
-    }
-
-    return this.executeSubmit();
-  }
-
-  executeSubmit() {
-
-  }
-
-  onReset(values?) {
-
-  }
-
-  handleSubmit = (e) => {
+  private handleSubmit = (e) => {
     if (e && e.preventDefault) {
       e.preventDefault();
     }
 
     return this.submitForm();
-  }
+  };
+
+  private submitForm = async () => {
+    try {
+      this.touched = setNestedObjectValues(this.values, true);
+      this.isSubmitting = true;
+      this.submitCount = this.submitCount + 1;
+
+      const isValid = this.runValidations();
+
+      if (!isValid) {
+        throw this.errors;
+      }
+      
+      const response = await this.onSubmit();
+      await this.onSubmitSuccess(response);
+    } catch(e) {
+      return this.onSubmitError(e);
+    }
+  };
+
+  private async runValidationSchema(values) {
+    const schema = isFunction(this.validationSchema) ? this.validationSchema() : this.validationSchema;
+    try {
+      const results = await validateYupSchema(values, schema);
+      return {};
+    } catch (err) {
+      const errors = yupToFormErrors(err);
+      this.isSubmitting = false;
+      return errors;
+    }
+  };
 
   private handleReset = () => {
     if (this.onReset) {
-      this.onReset(this.values);
+      this.onReset();
     }
   };
+
+  private setInMobx(prop, name, value) {
+    const lastValue = getIn(this[prop], name);
+
+    if (lastValue === undefined) {
+      this[prop] = setIn(this[prop], name, value);
+    } else {
+      set(this[prop], name, value);
+    }
+  }
 }
