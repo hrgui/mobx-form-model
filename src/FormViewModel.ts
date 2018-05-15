@@ -12,8 +12,8 @@ export default class FormViewModel {
   @observable isSubmitting = false;
   @observable submitCount = 0;
 
-  getValueFromInputEvent(e) {
-    const { type, value, checked } = e.target;
+  getValueFromInputEvent(target, ...other) {
+    const { type, value, checked } = target;
     const isNumericalValue = /number|range/.test(type);
     const isCheckbox = /checkbox/.test(type);
 
@@ -29,11 +29,15 @@ export default class FormViewModel {
     return value;
   }
 
-  handleChange = (e) => {
-    const target = e.target || e;
+  getNameFromInputEvent(target, ...other) {
     const { name, id } = target;
-    const fieldName = name || id;
-    const fieldValue = this.getValueFromInputEvent(e);
+    return name || id; 
+  }
+
+  handleChange = (e, ...other) => {
+    const target = e.target || e;
+    const fieldName = this.getNameFromInputEvent(target, ...other);
+    const fieldValue = this.getValueFromInputEvent(target, ...other);
     if (e.persist) {
       e.persist();
     }
