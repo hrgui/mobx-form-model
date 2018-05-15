@@ -1,6 +1,6 @@
 import { observable } from 'mobx';
 import { isFunction, setNestedObjectValues, setIn, yupToFormErrors, validateYupSchema, getIn } from './utils';
-import set from 'lodash.set';
+import {set} from 'lodash';
 
 export default class FormViewModel {
   validate?;

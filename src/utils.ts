@@ -1,5 +1,4 @@
-import cloneDeep from 'lodash.clonedeep';
-import toPath from 'lodash.topath';
+import {toPath, cloneDeep} from 'lodash';
 import * as React from 'react';
 
 /**

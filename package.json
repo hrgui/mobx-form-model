@@ -20,6 +20,7 @@
     "@babel/preset-stage-3": "^7.0.0-beta.46",
     "@babel/preset-typescript": "^7.0.0-beta.46",
     "@types/jest": "^22.2.3",
+    "@types/lodash": "^4.14.108",
     "@types/lodash.clonedeep": "^4.5.3",
     "@types/lodash.get": "^4.4.3",
     "@types/lodash.set": "^4.3.3",
@@ -37,9 +38,6 @@
   },
   "dependencies": {
     "filter-react-props": "^0.0.4",
-    "lodash.clonedeep": "^4.5.0",
-    "lodash.get": "^4.4.2",
-    "lodash.set": "^4.3.2",
-    "lodash.topath": "^4.5.2"
+    "lodash": "^4.17.10"
   }
 }
