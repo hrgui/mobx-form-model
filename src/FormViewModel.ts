@@ -107,15 +107,21 @@ export default class FormViewModel {
   onSubmitError(e) {}
   onSubmit() {}
 
-  private handleSubmit = (e) => {
+  protected handleSubmit(e) {
     if (e && e.preventDefault) {
       e.preventDefault();
     }
 
     return this.submitForm();
-  };
+  }
 
-  private submitForm = async () => {
+  protected handleReset() {
+    if (this.onReset) {
+      this.onReset();
+    }
+  }
+
+  protected async submitForm() {
     try {
       this.touched = setNestedObjectValues(this.values, true);
       this.isSubmitting = true;
@@ -133,7 +139,7 @@ export default class FormViewModel {
       console.error('Error when submitting form', e);
       return this.onSubmitError(e);
     }
-  };
+  }
 
   private async runValidationSchema(values) {
     const schema = isFunction(this.validationSchema) ? this.validationSchema() : this.validationSchema;
@@ -144,12 +150,6 @@ export default class FormViewModel {
       const errors = yupToFormErrors(err);
       this.isSubmitting = false;
       return errors;
-    }
-  };
-
-  private handleReset = () => {
-    if (this.onReset) {
-      this.onReset();
     }
   };
 
