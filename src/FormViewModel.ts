@@ -3,9 +3,8 @@ import { isFunction, setNestedObjectValues, setIn, yupToFormErrors, validateYupS
 import set from 'lodash.set';
 
 export default class FormViewModel {
-  onSubmit;
-  validate;
-  validationSchema;
+  validate?;
+  validationSchema?;
   initialValues = {};
   @observable values = { ...this.initialValues };
   @observable touched = {};
@@ -106,6 +105,7 @@ export default class FormViewModel {
 
   onSubmitSuccess(response) {}
   onSubmitError(e) {}
+  onSubmit() {}
 
   private handleSubmit = (e) => {
     if (e && e.preventDefault) {
@@ -121,7 +121,7 @@ export default class FormViewModel {
       this.isSubmitting = true;
       this.submitCount = this.submitCount + 1;
 
-      const isValid = this.runValidations();
+      const isValid = await this.runValidations();
 
       if (!isValid) {
         throw this.errors;
@@ -130,6 +130,7 @@ export default class FormViewModel {
       const response = await this.onSubmit();
       await this.onSubmitSuccess(response);
     } catch(e) {
+      console.error('Error when submitting form', e);
       return this.onSubmitError(e);
     }
   };

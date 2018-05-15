@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Observer, observer } from 'mobx-react';
 import { getIn, isFunction, isString } from './utils';
 import filterReactProps from 'filter-react-props';
+import {toJS} from 'mobx';
 
 
 @observer
@@ -17,7 +18,12 @@ export default class Field extends React.Component<any, any> {
         return <Observer>
           {() => {
             const { type, name, value, component = 'input', render } = this.props;
-            const modelValue = getIn(model.values, name);
+            let modelValue = getIn(model.values, name);
+
+            if (!this.props.bindValueToMobx) {
+              modelValue = toJS(modelValue);
+            }
+
             const defaultProps = {
               // why OR '' so we dont get uncontrolled error
               value: (type === 'radio' || type === 'checkbox' ? value : modelValue) || '',
@@ -26,7 +32,7 @@ export default class Field extends React.Component<any, any> {
               checked: type === 'radio' ? modelValue === this.props.value : undefined
             };
 
-            const props = {...defaultProps, ...this.props, model, _rendercount: this.rendercount};
+            const props = {...defaultProps, ...this.props, mobxFormModel: model, _rendercount: this.rendercount};
 
             this.rendercount += 1;
 
