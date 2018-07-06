@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Field Field <=> ModelForm should render basic types easily (text, number, radio) 1`] = `
+Array [
+  <input
+    defaultValue="Mickey Mouse"
+    name="name"
+    onBlur={[Function]}
+    onChange={[Function]}
+    value="Mickey Mouse"
+  />,
+  <input
+    defaultValue={100}
+    name="age"
+    onBlur={[Function]}
+    onChange={[Function]}
+    type="number"
+    value={100}
+  />,
+  <input
+    checked={true}
+    defaultValue="male"
+    name="gender"
+    onBlur={[Function]}
+    onChange={[Function]}
+    type="radio"
+    value="male"
+  />,
+  <input
+    checked={false}
+    defaultValue="female"
+    name="gender"
+    onBlur={[Function]}
+    onChange={[Function]}
+    type="radio"
+    value="female"
+  />,
+  <input
+    defaultValue={true}
+    name="isCartoon"
+    onBlur={[Function]}
+    onChange={[Function]}
+    value={true}
+  />,
+]
+`;
+
+exports[`Field Field <=> ModelForm should render basic types easily with a custom type in addition 1`] = `
+Array [
+  <input
+    defaultValue="Mickey Mouse"
+    name="name"
+    onBlur={[Function]}
+    onChange={[Function]}
+    value="Mickey Mouse"
+  />,
+  "male",
+]
+`;
+
+exports[`Field Field <=> ModelForm should support nested values 1`] = `
+<input
+  defaultValue="Mickey Mouse"
+  name="personal.name"
+  onBlur={[Function]}
+  onChange={[Function]}
+  value="Mickey Mouse"
+/>
+`;
+
+exports[`Field should render null w/o ModelForm 1`] = `null`;

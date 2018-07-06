@@ -1,4 +1,4 @@
-import {toPath, cloneDeep} from 'lodash';
+import { toPath, cloneDeep } from 'lodash';
 import * as React from 'react';
 
 /**
@@ -107,7 +107,7 @@ export const isEmptyChildren = (children: any): boolean =>
 export const isPromise = (value: any): boolean =>
   isObject(value) && isFunction(value.then);
 
-  /**
+/**
  * Transform Yup ValidationError to a more usable object
  */
 export function yupToFormErrors(yupError) {
@@ -123,12 +123,7 @@ export function yupToFormErrors(yupError) {
 /**
  * Validate a yup schema.
  */
-export function validateYupSchema(
-  values,
-  schema,
-  sync = false,
-  context = {}
-) {
+export function validateYupSchema(values, schema, sync = false, context = {}) {
   let validateData = {};
   for (let k in values) {
     if (values.hasOwnProperty(k)) {
@@ -138,6 +133,6 @@ export function validateYupSchema(
   }
   return schema[sync ? 'validateSync' : 'validate'](validateData, {
     abortEarly: false,
-    context: context,
+    context: context
   });
 }
