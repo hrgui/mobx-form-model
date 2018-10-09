@@ -27,10 +27,10 @@ export default class Field extends React.Component<any, any> {
     let modelValue = getIn(model.values, name);
     const v = (type === 'radio' || type === 'checkbox'
           ? value
+          // why OR '' so we dont get uncontrolled error
           : modelValue) || '';
     const defaultProps: any = {
       defaultValue: v,
-      // why OR '' so we dont get uncontrolled error
       value:v,
       onChange: model.handleChange,
       onBlur: model.handleBlur

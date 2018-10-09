@@ -23,10 +23,9 @@ This is an attempt to move the logic and put it elsewhere, into MobX.
 
 # Who is this library for?
 - For those who don't want to mix React and busineess logic together. 
-- For those that don't want to rely on render props to do everything and prefer mobx observables.
 
 # Who is this library not for?
-- Those who don't use mobx.
+- Those who don't use MobX and prefer plain-jane React. If that is the case, use [formik](https://github.com/jaredpalmer/formik)
 
 # Example
 
@@ -100,7 +99,10 @@ render(<PersonForm />, document.getElementById("root"));
 ```
 
 # How it works
-`<ModelForm />` and `<Field />` uses React.Context for both the `FormViewModel` and the View elements to contact to each other.
+1. A `<ModelForm />` is really just a `mobx-react` `<Provider />` that either provides a MobX form model or creates one.
+2. A `<Field />` is an observer than injects the value provided by `<Provider />` and supplies it the rendered component.
+3. When the `<Field />` updates by user interaction, it calls the Model's `handleChange` method, which changes the Model's `values` observable.
+4. When the observable `values` changes, then it updates React accordingly.
 
 
 # API
