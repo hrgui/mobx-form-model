@@ -1,9 +1,8 @@
-import { observer } from 'mobx-react';
+import { observer, Provider } from 'mobx-react';
 import * as React from 'react';
 import FormViewModel from './FormViewModel';
 import {isFunction} from 'lodash';
 import { observable } from 'mobx';
-export const ModelFormContext = React.createContext<FormViewModel | null | undefined>(null);
 
 export interface ModelFormProps {
   modelConstructor?: any;
@@ -57,9 +56,9 @@ export default class ModelForm extends React.Component<ModelFormProps, any> {
     }
 
     return (
-      <ModelFormContext.Provider value={model}>
+      <Provider model={model}>
         {isFunction(children) ? children({model}) : children}
-      </ModelFormContext.Provider>
+      </Provider>
     );
   }
 }

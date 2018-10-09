@@ -1,8 +1,12 @@
 # @hrgui/mobx-form-model
 
+**API is still unstable, and it may change wildly!**
+
 Yes, another attempt to bind mobx and forms, again. 
 
-I really like the API from [formik](https://github.com/jaredpalmer/formik) but I also do like [mobx](https://github.com/mobxjs/mobx). This library takes the best parts of formik and creates it into a MobX observable that is passed down through context.
+I really like the API from [formik](https://github.com/jaredpalmer/formik) but I also do like [mobx](https://github.com/mobxjs/mobx). However, with formik, a lot of the logic ends up baked into the component, which makes it tied to React.
+
+This is an attempt to move the logic and put it elsewhere, into MobX. 
 
 <!-- TOC -->
 
