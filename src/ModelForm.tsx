@@ -57,7 +57,9 @@ export default class ModelForm extends React.Component<ModelFormProps, any> {
 
     return (
       <Provider model={model}>
-        {isFunction(children) ? children({model}) : children}
+        <React.Fragment>
+          {isFunction(children) ? children({model}) : children}
+        </React.Fragment>
       </Provider>
     );
   }

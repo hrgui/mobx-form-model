@@ -5,7 +5,9 @@ import { getIn, isFunction, isString } from './utils';
 import filterReactProps from 'filter-react-props';
 import { toJS, isObservable } from 'mobx';
 
-@inject('model')
+@inject((stores: any) => {
+  return {model: stores.model}
+})
 @observer
 export default class Field extends React.Component<any, any> {
   render() {
@@ -17,6 +19,11 @@ export default class Field extends React.Component<any, any> {
       render,
       model
     } = this.props;
+
+    if (!model) {
+      return null;
+    }
+
     let modelValue = getIn(model.values, name);
     const v = (type === 'radio' || type === 'checkbox'
           ? value
