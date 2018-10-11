@@ -6,7 +6,7 @@ import filterReactProps from 'filter-react-props';
 import { toJS, isObservable } from 'mobx';
 
 @inject((stores: any) => {
-  return {model: stores.model}
+  return {model: stores.model};
 })
 @observer
 export default class Field extends React.Component<any, any> {

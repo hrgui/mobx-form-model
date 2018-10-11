@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, set as mobXSet } from 'mobx';
 import {
   isFunction,
   setNestedObjectValues,
@@ -57,7 +57,7 @@ export default class FormViewModel {
    * Note: This only can handle children at the root level. If desired to handle children at a level other
    * than root, please do so at the FormViewModel.
    */
-  @observable childFormModels: FormViewModel[] = [];
+  @observable childFormModels: {[key: string]: FormViewModel} = {};
   /**
    * If provided, when setting the field as touched, it will inform the parent about the field being touched.
    * Note: This only can handle children at the root level. If desired to handle children at a level other
@@ -79,10 +79,8 @@ export default class FormViewModel {
     this.handleSubmit = this.handleSubmit.bind(this);
 
     if (values) {
-      // we make a copy so that if we need it, we can refer to it
-      this.initialValues = {...values};
-      // we do a direct assignment so it propagates back up
-      this.values = values;
+      this.setInitialValues(values);
+      this.setValues(values, false);
     }
   }
 
@@ -177,15 +175,20 @@ export default class FormViewModel {
     this.runValidations();
   }
 
+  setInitialValues(values) {
+    // we make a copy so that if we need it, we can refer to it
+    this.initialValues = {...values};
+  }
+
   /**
    * This method sets all field values explicitly.
    * Note that this will cause every form value to re-render, because the entire values object has changed.
    * The added benefit is that validations will be run after setValues is called.
    * Note that setValues will automatically do the change immediately; there is no need to wait for another cycle.
    */
-  setValues(values) {
+  setValues(values, validate=true) {
     this.values = values;
-    this.runValidations();
+    validate && this.runValidations();
   }
 
   /**
@@ -230,7 +233,7 @@ export default class FormViewModel {
   addChildFormModel(fm: FormViewModel, key) {
     fm.childProp = key;
     fm.parentViewModel = this;
-    this.childFormModels.push(fm);
+    mobXSet(this.childFormModels, {[key]: fm});
   }
 
   /**
@@ -253,7 +256,13 @@ export default class FormViewModel {
     this.errors = { ...schemaErrors, ...validateFnErrors };
 
     if (this.childFormModels) {
-      for (const formViewModel of this.childFormModels) {
+      for (const name in this.childFormModels) {
+        if (!this.childFormModels.hasOwnProperty(name)) {
+          continue;
+        }
+
+        const formViewModel = this.childFormModels[name];
+
         // TODO: values that we push here, where does it come from, actually
         const isValid = await formViewModel.runValidations();
         if (isValid) {
@@ -271,7 +280,7 @@ export default class FormViewModel {
    * By default, this resets the form to a pristine state. If this method is overridden, please call `super.onReset()` to get to an initial state.
    */
   onReset() {
-    this.values = { ...this.initialValues };
+    this.setValues(this.initialValues, false);
     this.touched = {};
     this.errors = {};
     this.isSubmitting = false;

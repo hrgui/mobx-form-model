@@ -1,4 +1,4 @@
-import { observer, Provider } from 'mobx-react';
+import { observer, Provider, inject } from 'mobx-react';
 import * as React from 'react';
 import FormViewModel from './FormViewModel';
 import {isFunction} from 'lodash';
@@ -10,8 +10,13 @@ export interface ModelFormProps {
   model?: FormViewModel;
   onSubmitSuccess?;
   onSubmitError?;
+  parentModel?: FormViewModel;
+  name?: string;
 }
 
+@inject((stores: any) => {
+  return {parentModel: stores.model}
+})
 @observer
 export default class ModelForm extends React.Component<ModelFormProps, any> {
   @observable model;
@@ -19,16 +24,27 @@ export default class ModelForm extends React.Component<ModelFormProps, any> {
   generateModel() {
     const ModelConstructor = this.props.modelConstructor || FormViewModel;
     this.model = this.props.model || new ModelConstructor(this.props.initialValues);
+
+    if (this.props.parentModel && this.props.name) {
+      const parentModel = this.props.parentModel;
+      parentModel.addChildFormModel(this.model, this.props.name);
+    }
   }
 
-  updateModel(props) {
+  updateModel(props, prevProps: any = {}) {
+    let initModel = false;
     if (!this.model) {
       this.generateModel();
+      initModel = true;
     }
 
 
     const {onSubmitSuccess, onSubmitError} = props;
     const {model} = this;
+
+    if (!initModel && prevProps.initialValues !== props.initialValues) {
+      model.setValues(props.initialValues);
+    }
 
     if (onSubmitSuccess) {
       model.onSubmitSuccess = onSubmitSuccess.bind(model);
@@ -43,8 +59,9 @@ export default class ModelForm extends React.Component<ModelFormProps, any> {
     this.updateModel(this.props);
   }
 
-  componentDidUpdate() {
-    this.updateModel(this.props);
+
+  componentDidUpdate(prevProps) {
+    this.updateModel(this.props, prevProps);
   }
 
   render() {

@@ -3,7 +3,7 @@ import Field from '@hrgui/mobx-form-model/src/Field';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ModelForm from '@hrgui/mobx-form-model/src/ModelForm';
-import { observable } from 'mobx';
+import { observable, values } from 'mobx';
 import { observer } from 'mobx-react';
 import * as yup from 'yup';
 
@@ -21,12 +21,8 @@ class Person extends FormViewModel {
     lastName: yup.string().required()
   });
 
-  constructor(values?) {
-    super(values);
-
-    this.nestedModel = new NestedModel(this.values.nestedModel);
-    this.addChildFormModel(this.nestedModel, "nestedModel");
-  }
+  //this.nestedModel = new NestedModel(this.values.nestedModel);
+  //this.addChildFormModel(this.nestedModel, "nestedModel");
 
   getOtherPrefs(x: any) {
     if (this.values.preference1 === "") {
@@ -95,15 +91,14 @@ export class PersonForm extends React.Component<any, any> {
             </Field>
             <Field name="preference2" component={MySelect} prefs={(_: any) => person.getOtherPrefs(_)} />
 
-            <ModelForm model={person.nestedModel}>
+            <ModelForm name="nestedModel" initialValues={person.values.nestedModel} modelConstructor={NestedModel}>
               <Field name="a" />
             </ModelForm>
 
             <pre>values: {JSON.stringify(person.values, null, 2)}</pre>
             <pre>touched: {JSON.stringify(person.touched, null, 2)}</pre>
             <pre>errors: {JSON.stringify(person.errors, null, 2)}</pre>
-
-            <pre>touched: {JSON.stringify(person.nestedModel.touched, null, 2)}</pre>
+            <pre>{values(person.childFormModels).length} {person.childFormModels.nestedModel && JSON.stringify(person.childFormModels.nestedModel.errors, null, 2)}</pre>
             <button onClick={person.handleSubmit}>Save</button>
           </React.Fragment>)}
       </ModelForm>

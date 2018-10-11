@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
-import ModelForm from './ModelForm';
+import { shallow, mount } from 'enzyme';
+import {default as InjectedModelForm} from './ModelForm';
 import FormViewModel from './FormViewModel';
 import {wait} from './testUtils';
 
+//@ts-ignore
+const ModelForm: any = InjectedModelForm.wrappedComponent;
 
 describe('ModelForm', () => {
 
@@ -20,7 +22,7 @@ describe('ModelForm', () => {
       expect(wrapper.html()).toContain("{}");
     });
 
-    it('should support basic functionality with initial values', () => {
+    it('should support basic functionality with initial values', async () => {
       const wrapper = shallow(
         <ModelForm initialValues={{name: "Harman"}}>
           {({model}) => {
@@ -30,6 +32,21 @@ describe('ModelForm', () => {
       );
       expect(wrapper).toBeDefined();
       expect(wrapper.html()).toContain(`Harman`);
+    });
+
+    it('should support basic functionality with initial values', async () => {
+      function MyForm({initialValues = {name: "Harman2"}}: {initialValues?}) {
+        return (<ModelForm initialValues={initialValues}>
+          {({model}) => {
+            return <div>Hello World {JSON.stringify(model.values)}</div>
+          }}
+        </ModelForm>)
+      }
+      
+      const wrapper = mount(<MyForm />);
+      wrapper.setProps({initialValues: {name: "Test"}});
+      expect(wrapper).toBeDefined();
+      expect(wrapper.html()).toContain(`Test`);
     });
 
     it('should support other class constructors', () => {
