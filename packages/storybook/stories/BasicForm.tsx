@@ -21,9 +21,6 @@ class Person extends FormViewModel {
     lastName: yup.string().required()
   });
 
-  //this.nestedModel = new NestedModel(this.values.nestedModel);
-  //this.addChildFormModel(this.nestedModel, "nestedModel");
-
   getOtherPrefs(x: any) {
     if (this.values.preference1 === "") {
       return [];
