@@ -1,0 +1,21 @@
+{
+  "name": "mfm-storybook",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "start-storybook -p 9001 -c .storybook"
+  },
+  "dependencies": {
+    "@hrgui/mobx-form-model": "^0.6.0",
+    "@storybook/addon-actions": "^3.4.11",
+    "@storybook/react": "^4.0.0-alpha.24",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-core": "^6.26.3",
+    "react": "^16.5.2",
+    "react-docgen-typescript-webpack-plugin": "^1.1.0",
+    "react-dom": "^16.5.2",
+    "storybook": "^1.0.0"
+  }
+}
