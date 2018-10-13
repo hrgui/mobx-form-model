@@ -1,6 +1,6 @@
 {
   "name": "sandbox",
-  "version": "1.0.0",
+  "version": "1.0.1-0",
   "main": "index.js",
   "license": "MIT",
   "private": true,
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.56",
-    "@hrgui/mobx-form-model": "^0.6.0",
+    "@hrgui/mobx-form-model": "^0.6.1-0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "yup": "0.24.1"
