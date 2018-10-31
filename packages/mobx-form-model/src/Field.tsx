@@ -59,6 +59,8 @@ export default class Field extends React.Component<any, any> {
 
     if (!isString(component)) {
       delete finalProps.component;
+      delete finalProps.model;
+      delete finalProps.defaultValue;
     }
 
     return React.createElement(component, {
