@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest",
     "docs": "typedoc --out docs/ --theme markdown --exclude '**/*.spec.+(ts|tsx)' --readme none src/",
-    "build": "tsc"
+    "prePublishOnly": "tsc"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.0",
