@@ -7,12 +7,16 @@ import { observable } from 'mobx';
 export interface ModelFormProps {
   modelConstructor?: any;
   initialValues?: any;
+  values?: any;
   model?: FormViewModel;
   onSubmitSuccess?;
   onSubmitError?;
+  validate?;
   parentModel?: FormViewModel;
   name?: string;
   children?: any;
+  validationSchema?;
+  onSubmit?;
 }
 
 @inject((stores: any) => {
@@ -40,11 +44,15 @@ export default class ModelForm extends React.Component<ModelFormProps, any> {
     }
 
 
-    const {onSubmitSuccess, onSubmitError} = props;
+    const {onSubmitSuccess, onSubmit, validationSchema, onSubmitError} = props;
     const {model} = this;
 
     if (!initModel && prevProps.initialValues !== props.initialValues) {
       model.setValues(props.initialValues);
+    }
+
+    if (!initModel && prevProps.values !== props.values) {
+      model.setValues(props.values);
     }
 
     if (onSubmitSuccess) {
@@ -53,6 +61,14 @@ export default class ModelForm extends React.Component<ModelFormProps, any> {
 
     if (onSubmitError) {
       model.onSubmitError = onSubmitError.bind(model);
+    }
+
+    if (onSubmit) {
+      model.onSubmit = onSubmit.bind(model);
+    }
+
+    if (validationSchema) {
+      model.validationSchema = validationSchema;
     }
   }
 

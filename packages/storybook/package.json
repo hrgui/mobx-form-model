@@ -8,17 +8,19 @@
     "start": "start-storybook -p 9001 -c .storybook"
   },
   "dependencies": {
+    "@babel/core": "^7.1.2",
     "@hrgui/mobx-form-model": "^0.6.1-0",
     "@material-ui/core": "^3.2.0",
     "@storybook/addon-actions": "^3.4.11",
-    "@storybook/react": "^4.0.0-alpha.24",
+    "@storybook/react": "^4.0.0",
     "awesome-typescript-loader": "^5.2.1",
     "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.4",
     "fetch-mock": "^7.0.7",
     "react": "^16.5.2",
     "react-docgen-typescript-webpack-plugin": "^1.1.0",
     "react-dom": "^16.5.2",
-    "storybook": "^1.0.0",
-    "xhr-mock": "^2.4.1"
+    "xhr-mock": "^2.4.1",
+    "yup": "^0.26.6"
   }
 }
