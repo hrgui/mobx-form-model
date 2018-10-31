@@ -1,7 +1,6 @@
 import Field from '@hrgui/mobx-form-model/src/Field';
 import React from 'react';
 import ModelForm from '@hrgui/mobx-form-model/src/ModelForm';
-import { values } from 'mobx';
 import { observer } from 'mobx-react';
 import { storiesOf } from '@storybook/react/dist/client/preview';
 import MockFetch from '../components/MockFetch';
@@ -27,11 +26,9 @@ const PersonForm = observer(function({data}) {
             <option value="T1">Test 1</option>
             <option value="T2">Test 2</option>
           </Field>
-
           <pre>values: {JSON.stringify(person.values, null, 2)}</pre>
           <pre>touched: {JSON.stringify(person.touched, null, 2)}</pre>
           <pre>errors: {JSON.stringify(person.errors, null, 2)}</pre>
-          <pre>{values(person.childFormModels).length} {person.childFormModels.nestedModel && JSON.stringify(person.childFormModels.nestedModel.errors, null, 2)}</pre>
           <div style={{position: "fixed", "bottom": 0, "padding": "20px"}}>
             <button onClick={person.handleSubmit}>Save</button>
           </div>

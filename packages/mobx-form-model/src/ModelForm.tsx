@@ -44,7 +44,7 @@ export default class ModelForm extends React.Component<ModelFormProps, any> {
     }
 
 
-    const {onSubmitSuccess, onSubmit, validationSchema, onSubmitError} = props;
+    const {onSubmitSuccess, validate, onSubmit, validationSchema, onSubmitError} = props;
     const {model} = this;
 
     if (!initModel && prevProps.initialValues !== props.initialValues) {
@@ -55,19 +55,23 @@ export default class ModelForm extends React.Component<ModelFormProps, any> {
       model.setValues(props.values);
     }
 
-    if (onSubmitSuccess) {
+    if (onSubmitSuccess && prevProps.onSubmitSuccess !== onSubmitSuccess) {
       model.onSubmitSuccess = onSubmitSuccess.bind(model);
     }
 
-    if (onSubmitError) {
+    if (onSubmitError && prevProps.onSubmitError !== onSubmitError) {
       model.onSubmitError = onSubmitError.bind(model);
     }
 
-    if (onSubmit) {
+    if (onSubmit && prevProps.onSubmit !== onSubmit) {
       model.onSubmit = onSubmit.bind(model);
     }
 
-    if (validationSchema) {
+    if (validate && prevProps.validate !== validate) {
+      model.validate = validate.bind(model);
+    }
+
+    if (validationSchema && prevProps.validationSchema !== validationSchema) {
       model.validationSchema = validationSchema;
     }
   }

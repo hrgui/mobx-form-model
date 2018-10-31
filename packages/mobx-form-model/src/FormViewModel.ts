@@ -263,7 +263,6 @@ export default class FormViewModel {
 
         const formViewModel = this.childFormModels[name];
 
-        // TODO: values that we push here, where does it come from, actually
         const isValid = await formViewModel.runValidations();
         if (isValid) {
           continue;

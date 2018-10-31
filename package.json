@@ -6,9 +6,8 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "jest",
-    "docs": "typedoc --out docs/ --theme markdown --exclude '**/*.spec.+(ts|tsx)' --readme none src/",
-    "build": "tsc"
+    "prerelease": "lerna run prePublishOnly",
+    "release": "lerna publish"
   },
   "devDependencies": {
     "lerna": "^2.9.0"
