@@ -12,6 +12,7 @@ export interface ModelFormProps {
   onSubmitError?;
   parentModel?: FormViewModel;
   name?: string;
+  children?: any;
 }
 
 @inject((stores: any) => {

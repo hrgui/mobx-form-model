@@ -6,6 +6,7 @@ import { observable, values } from 'mobx';
 import { observer } from 'mobx-react';
 import * as yup from 'yup';
 import { storiesOf } from '@storybook/react/dist/client/preview';
+import MockFetch from '../components/MockFetch';
 
 
 class NestedModel extends FormViewModel {
@@ -31,6 +32,11 @@ class Person extends FormViewModel {
       { name: 'N/A', value: '' },
       { name: 'Test 1', value: 'T1' }
     ]
+  }
+
+  async onSubmit() {
+    const res = await fetch("/api/person", {method: "POST"});
+    return res.json();
   }
 };
 
@@ -66,9 +72,8 @@ export class PersonForm extends React.Component<any, any> {
     }
   };
 
-  onSubmitSuccess() {
-    console.log(this);
-    alert('done');
+  onSubmitSuccess(res) {
+    alert(JSON.stringify(res));
   }
 
   render() {
@@ -107,6 +112,15 @@ export class PersonForm extends React.Component<any, any> {
 
 
 const stories = storiesOf("Basic Form", module);
-stories.add("Basic Form", () => <PersonForm />);
+stories.add("Basic Form", () => <MockFetch onMockSetup={(fetchMock) => {
+  fetchMock.post('/api/person', {
+    status: 200,
+    body: {
+      'hello': 'world'
+    }
+  });
+}}>
+  <PersonForm />
+</MockFetch>);
 
 // ReactDOM.render(<PersonForm />, document.querySelector("#root"));

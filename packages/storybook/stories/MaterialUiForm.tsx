@@ -2,11 +2,12 @@ import FormViewModel from '@hrgui/mobx-form-model/src/FormViewModel';
 import Field from '@hrgui/mobx-form-model/src/Field';
 import React from 'react';
 import ModelForm from '@hrgui/mobx-form-model/src/ModelForm';
-import { observable, values } from 'mobx';
+import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as yup from 'yup';
 import { storiesOf } from '@storybook/react/dist/client/preview';
 import {TextField, NativeSelect, Button} from '@material-ui/core';
+import MockFetch from '../components/MockFetch';
 
 
 class NestedModel extends FormViewModel {
@@ -32,6 +33,11 @@ class Person extends FormViewModel {
       { name: 'N/A', value: '' },
       { name: 'Test 1', value: 'T1' }
     ]
+  }
+
+  async onSubmit() {
+    const res = await fetch("/api/person", {method: "POST"});
+    return res.json();
   }
 };
 
@@ -67,9 +73,8 @@ export class PersonForm extends React.Component<any, any> {
     }
   };
 
-  onSubmitSuccess() {
-    console.log(this);
-    alert('done');
+  onSubmitSuccess(res) {
+    alert(JSON.stringify(res));
   }
 
   render() {
@@ -95,7 +100,7 @@ export class PersonForm extends React.Component<any, any> {
             <pre>values: {JSON.stringify(person.values, null, 2)}</pre>
             <pre>touched: {JSON.stringify(person.touched, null, 2)}</pre>
             <pre>errors: {JSON.stringify(person.errors, null, 2)}</pre>
-            <pre>{values(person.childFormModels).length} {person.childFormModels.nestedModel && JSON.stringify(person.childFormModels.nestedModel.errors, null, 2)}</pre>
+            <pre>{person.childFormModels.nestedModel && JSON.stringify(person.childFormModels.nestedModel.errors, null, 2)}</pre>
             <div style={{position: "fixed", "bottom": 0, "padding": "20px"}}>
               <Button onClick={person.handleSubmit}>Save</Button>
             </div>
@@ -106,7 +111,18 @@ export class PersonForm extends React.Component<any, any> {
 }
 
 
+
 const stories = storiesOf("Material UI Form", module);
-stories.add("Material UI Form", () => <PersonForm />);
+stories.add("Material UI Form", () => <MockFetch 
+  onMockSetup={(fetchMock) => {
+    fetchMock.post('/api/person', {
+      status: 200,
+      body: {
+        'hello': 'world2'
+      }
+    });
+  }}>
+  <PersonForm />  
+</MockFetch>);
 
 // ReactDOM.render(<PersonForm />, document.querySelector("#root"));
