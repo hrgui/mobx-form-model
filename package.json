@@ -6,7 +6,6 @@
     "packages/*"
   ],
   "scripts": {
-    "prerelease": "lerna run prePublishOnly",
     "release": "lerna publish"
   },
   "devDependencies": {
