@@ -1,6 +1,6 @@
 {
   "name": "@hrgui/mobx-form-model",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "main": "dist/index.js",
   "license": "MIT",
   "module": "src/index.ts",
